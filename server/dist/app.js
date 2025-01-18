@@ -16,6 +16,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("./config/db"));
 require("./models/Log"); // 确保导入模型，触发模型的初始化
+require("./models/DateLog");
 //import cors from 'cors';
 //import { router } from './routes/index';
 const app = (0, express_1.default)();

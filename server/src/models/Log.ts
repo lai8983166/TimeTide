@@ -3,6 +3,7 @@ import sequelize from '../config/db';
 
 class Log extends Model{
     public id!:number;
+    public content!:string;
     public category!: string;
     public timeMode!:string;
     public startTime!:Date;
@@ -17,6 +18,10 @@ Log.init(
             type:DataTypes.INTEGER,
             primaryKey:true,
             autoIncrement:true
+        },
+        content:{
+            type:DataTypes.STRING,
+            allowNull:false,
         },
         category:{
             type:DataTypes.STRING,

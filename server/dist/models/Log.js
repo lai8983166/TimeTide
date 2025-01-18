@@ -13,6 +13,10 @@ Log.init({
         primaryKey: true,
         autoIncrement: true
     },
+    content: {
+        type: sequelize_1.DataTypes.STRING,
+        allowNull: false,
+    },
     category: {
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,

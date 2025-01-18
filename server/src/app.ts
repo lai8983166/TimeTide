@@ -2,7 +2,7 @@
 import express from 'express';
 import sequelize from './config/db';
 import './models/Log';  // 确保导入模型，触发模型的初始化
-
+import './models/DateLog'; 
 //import cors from 'cors';
 //import { router } from './routes/index';
 
