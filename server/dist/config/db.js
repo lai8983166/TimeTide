@@ -13,5 +13,6 @@ process.env.DB_PASSWORD, // 密码
 {
     host: process.env.DB_HOST, // 数据库主机
     dialect: process.env.DB_DIALECT, // 数据库类型
+    timezone: process.env.DB_TIMEZONE, // 可选的时区配置
 });
 exports.default = sequelize;

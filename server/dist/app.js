@@ -17,6 +17,7 @@ const express_1 = __importDefault(require("express"));
 const db_1 = __importDefault(require("./config/db"));
 require("./models/Log"); // 确保导入模型，触发模型的初始化
 require("./models/DateLog");
+const index_1 = __importDefault(require("./routes/index"));
 //import cors from 'cors';
 //import { router } from './routes/index';
 const app = (0, express_1.default)();
@@ -24,21 +25,21 @@ const app = (0, express_1.default)();
 //app.use(cors());
 app.use(express_1.default.json());
 // 路由
-//app.use('/api', router);
+app.use("/route", index_1.default);
 // 启动应用
 const startServer = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield db_1.default.authenticate(); // 测试数据库连接
-        console.log('Database connected successfully.');
+        console.log("Database connected successfully.");
         // force: true 会先删除表然后重新创建
         yield db_1.default.sync({ force: true });
-        console.log('Table created successfully.');
+        console.log("Table created successfully.");
         app.listen(3001, () => {
-            console.log('Server running on http://localhost:3001');
+            console.log("Server running on http://localhost:3001");
         });
     }
     catch (error) {
-        console.error('Unable to connect to the database:', error);
+        console.error("Unable to connect to the database:", error);
     }
 });
 startServer();

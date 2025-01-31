@@ -11,7 +11,7 @@ Log.init({
     id: {
         type: sequelize_1.DataTypes.INTEGER,
         primaryKey: true,
-        autoIncrement: true
+        autoIncrement: true,
     },
     content: {
         type: sequelize_1.DataTypes.STRING,
@@ -43,8 +43,8 @@ Log.init({
     },
 }, {
     sequelize: db_1.default, // 连接实例
-    modelName: 'Log',
-    tableName: 'logs', // 指定表名
+    modelName: "Log",
+    tableName: "logs", // 指定表名
     timestamps: false, // 不使用自动时间戳
 });
 exports.default = Log;

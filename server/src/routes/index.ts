@@ -1,10 +1,10 @@
 // src/routes/index.ts
-import { Router } from 'express';
+import { Router } from "express";
+import { buildSchedule, buildTable } from "../apis/api";
 
 const router: Router = Router();
 
-router.get('/', (req, res) => {
-  res.send('Welcome to the Express server with TypeScript!');
-});
+router.post("/buildtable", buildTable);
+router.post("/buildschedule", buildSchedule);
 
-export { router };
+export default router;
