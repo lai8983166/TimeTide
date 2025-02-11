@@ -8,14 +8,21 @@ import {
   getTableData,
 } from "../models/Schedule";
 
-//获取某个日期的表
-export const getTable = async (req: Request, res: Response) => {
-  const { date }: { date: string } = req.body;
+// 获取某个日期的表
+export const getTable = async (req: Request, res: Response): Promise<void> => {
+  const { date }: { date: string } = req.query as { date: string };
+
+  // 确保 date 参数存在
+  if (!date) {
+    res.status(400).json({ error: "Date parameter is required" });
+  }
+
   try {
+    // 使用日期参数获取表格数据
     const table = await getTableData(new Date(date));
     res.status(200).json({
       data: table,
-      meassage: "get table success",
+      message: "Get table success",
     });
   } catch (error) {
     const e = error as Error;
