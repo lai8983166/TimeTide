@@ -1,5 +1,5 @@
 // src/routes/index.ts
-import { Router } from "express";
+import { Router, Request, Response } from "express";
 import { buildSchedule, buildTable, getTable } from "../apis/api";
 
 const router: Router = Router();

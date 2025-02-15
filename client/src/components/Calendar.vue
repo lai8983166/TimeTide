@@ -16,6 +16,7 @@
   
   <script>
   import { ref } from 'vue';
+  import axios from 'axios';
   
   export default {
     name: 'Calendar',
@@ -51,8 +52,24 @@
       };
   
       // 日期点击事件
-      const onDateClicked = (day) => {
+      const onDateClicked = async (day) => {
+        const selectedDate = `${currentYear.value}-${(currentMonth.value + 1).toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+
         alert(`You selected: ${monthNames.value[currentMonth.value]} ${day}, ${currentYear.value}`);
+
+        try {
+        // 发送 GET 请求到后端的 getTable API
+          const response = await axios.get(`http://localhost:3001/route/gettable`, {
+            params: {
+              date: selectedDate
+            }
+          });
+
+          // 处理响应数据
+          console.log(response.data); // 你可以在这里使用数据渲染页面等
+        } catch (error) {
+          console.error('Error fetching table data:', error);
+        }
       };
   
       return {
