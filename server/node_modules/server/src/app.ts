@@ -4,13 +4,15 @@ import sequelize from "./config/db";
 import "./models/Log"; // 确保导入模型，触发模型的初始化
 import "./models/DateLog";
 import route from "./routes/index";
-//import cors from 'cors';
-//import { router } from './routes/index';
+import cors from 'cors';
 
 const app = express();
 
 // Middleware
-//app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:5173'  // 只允许来自 localhost:5173 的请求
+}));
+
 app.use(express.json());
 
 // 路由

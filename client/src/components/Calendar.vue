@@ -16,11 +16,11 @@
   
   <script>
   import { ref } from 'vue';
-  import axios from 'axios';
-  
+  import { useRouter } from 'vue-router';  // 导入 useRouter
   export default {
     name: 'Calendar',
     setup() {
+      const router = useRouter();  // 获取路由实例
       const currentMonth = ref(new Date().getMonth());
       const currentYear = ref(new Date().getFullYear());
       
@@ -57,19 +57,8 @@
 
         alert(`You selected: ${monthNames.value[currentMonth.value]} ${day}, ${currentYear.value}`);
 
-        try {
-        // 发送 GET 请求到后端的 getTable API
-          const response = await axios.get(`http://localhost:3001/route/gettable`, {
-            params: {
-              date: selectedDate
-            }
-          });
-
-          // 处理响应数据
-          console.log(response.data); // 你可以在这里使用数据渲染页面等
-        } catch (error) {
-          console.error('Error fetching table data:', error);
-        }
+        //跳转到目标页面
+        router.push({ name: 'CalendarPage', params: { date: selectedDate } });
       };
   
       return {

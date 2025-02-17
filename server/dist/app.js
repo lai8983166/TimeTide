@@ -18,11 +18,12 @@ const db_1 = __importDefault(require("./config/db"));
 require("./models/Log"); // 确保导入模型，触发模型的初始化
 require("./models/DateLog");
 const index_1 = __importDefault(require("./routes/index"));
-//import cors from 'cors';
-//import { router } from './routes/index';
+const cors_1 = __importDefault(require("cors"));
 const app = (0, express_1.default)();
 // Middleware
-//app.use(cors());
+app.use((0, cors_1.default)({
+    origin: 'http://localhost:5173' // 只允许来自 localhost:5173 的请求
+}));
 app.use(express_1.default.json());
 // 路由
 app.use("/route", index_1.default);

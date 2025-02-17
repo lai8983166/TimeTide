@@ -11,7 +11,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.buildSchedule = exports.buildTable = exports.setAware = exports.getSchedule = exports.getTables = exports.getTable = void 0;
 const Schedule_1 = require("../models/Schedule");
-//获取某个日期的表
 // 获取某个日期的表
 const getTable = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { date } = req.query;
