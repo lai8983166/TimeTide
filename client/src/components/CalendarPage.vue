@@ -1,4 +1,31 @@
 <template>
+  <div class="task-add">
+    <h1>Add Task</h1>
+    <form @submit.prevent="submitTask">
+      <label>Content: </label>
+      <input v-model="task.content" type="text" required />
+
+      <label>Category: </label>
+      <input v-model="task.category" type="text" required />
+
+      <label>timeMode: </label>
+      <input v-model="task.timeMode" type="text" required />
+
+      <label>Start Time: </label>
+      <input v-model="task.startTime" type="datetime-local" required />
+
+      <label>End Time: </label>
+      <input v-model="task.endTime" type="datetime-local" required />
+
+      <label>probableTime: </label>
+      <input v-model="task.probableTime" type="text" required />
+
+      <label>Is Aware: </label>
+      <input v-model="task.isAware" type="checkbox" />
+
+      <button type="submit">Add Task</button>
+    </form>
+  </div>
   <div class="table-container">
     <!-- 表头时间轴 -->
     <div class="time-column" v-for="(column, index) in 3" :key="index">
@@ -46,6 +73,15 @@ export default {
           endTime: "2025-01-31T09:00:00.000Z",
         },
       ],
+      task:{
+        content:'',
+        category:'',
+        timeMode:'',
+        startTime:'',
+        endTime:'',
+        probableTime:'',
+        isAware:'',
+      },
       seletedDate:this.date,
       hours: Array.from({ length: 8 }, (_, i) => i), // 每列显示 8 个小时，共三列
       dayStartTime: new Date("2025-01-31T00:00:00.000Z").getTime(), // 当日的起始时间（00:00）
@@ -65,6 +101,22 @@ export default {
     this.fetchTasks();//获取任务数据
   },
   methods: {
+    async submitTask() {
+      try {
+        
+        const response = await axios.post('http://localhost:3001/route/buildSchedule', {
+          date: this.seletedDate, // 发送任务的日期
+          schedule: this.task, // 发送任务数据
+        });
+
+        if (response.status === 200) {
+          console.log('Task added successfully:', response.data);
+          // 更新任务列表，显示成功消息等
+        }
+      } catch (error) {
+        console.error('Error adding task:', error.response || error.message);
+      }
+    },
     async fetchTasks(){
       try{
         const response=await axios.get('http://localhost:3001/route/gettable',{params:{date:this.seletedDate},});
@@ -82,8 +134,8 @@ export default {
     },
     processTasks() {
       this.tasks.forEach((task) => {
-        const taskStart = new Date(task.startTime).getUTCHours(); // 获取任务开始的小时（UTC时间）
-        const taskEnd = new Date(task.endTime).getUTCHours(); // 获取任务结束的小时（UTC时间）
+        const taskStart = new Date(task.startTime).getHours(); // 获取任务开始的小时（local时间）
+        const taskEnd = new Date(task.endTime).getHours(); // 获取任务结束的小时（local时间）
 
         // 将任务添加到相应的时间段数组中
         for (let i = taskStart; i < taskEnd; i++) {
@@ -159,8 +211,16 @@ export default {
 
 .task-bar {
   position: absolute;
-  left: 60px; /* 任务条距离时间段字符右侧的间距 */
-  width: 20px; /* 固定宽度 */
+  left: 60px;
+  width: 20px;
+  background: linear-gradient(45deg, #4caf50, #81c784);
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.task-bar:hover {
+  transform: scale(1.1);
 }
 
 .task-details-box {
