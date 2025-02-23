@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildSchedule = exports.buildTable = exports.setAware = exports.getSchedule = exports.getTables = exports.getTable = void 0;
+exports.deleteSchedule = exports.buildSchedule = exports.buildTable = exports.setAware = exports.getSchedule = exports.getTables = exports.getTable = void 0;
 const Schedule_1 = require("../models/Schedule");
 // 获取某个日期的表
 const getTable = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
@@ -75,3 +75,19 @@ const buildSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.buildSchedule = buildSchedule;
+//删除一个活动
+const deleteSchedule = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { date, id } = req.body;
+    try {
+        const dele = yield (0, Schedule_1.deleteData)(new Date(date), id);
+        res.status(200).json({
+            data: dele,
+            message: "dele success",
+        });
+    }
+    catch (error) {
+        const e = error;
+        res.status(500).json({ error: e.message });
+    }
+});
+exports.deleteSchedule = deleteSchedule;

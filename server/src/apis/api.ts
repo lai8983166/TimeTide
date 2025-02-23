@@ -6,6 +6,7 @@ import {
   createDynamicModel,
   createTableByDate,
   getTableData,
+  deleteData,
 } from "../models/Schedule";
 
 // 获取某个日期的表
@@ -69,5 +70,21 @@ export const buildSchedule = async (req: Request, res: Response) => {
   } catch (error) {
     const e = error as Error;
     res.status(500).json({ error: e.message });
+  }
+};
+
+//删除一个活动
+export const deleteSchedule=async (req:Request,res:Response)=>{
+  const {date,id}:{date:string;id:number}=req.body;
+  try{
+    const dele=await deleteData(new Date(date),id);
+    
+    res.status(200).json({
+      data:dele,
+      message:"dele success",
+    });
+  }catch(error){
+    const e= error as Error;
+    res.status(500).json({error:e.message});
   }
 };

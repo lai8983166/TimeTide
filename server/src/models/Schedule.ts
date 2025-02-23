@@ -155,3 +155,32 @@ export const insertData = async (date: Date, schedule: ScheduleAttributes) => {
     throw new Error("Error inserting data");
   }
 };
+
+//删除某个活动
+export const deleteData=async(date:Date,id:number)=>{
+  const tableName = `schedule_${date
+    .toISOString()
+    .split("T")[0]
+    .replace(/-/g, "_")}`;
+
+  // 创建动态模型
+  const Schedule = await createDynamicModel(tableName);
+  // 同步表结构，alter: true 确保表结构与模型一致
+  await Schedule.sync({ alter: true });
+  try{
+    const deletedata=await Schedule.destroy({
+      where:{
+        id:id
+      }
+    });
+    if(deletedata){
+      console.log('Data deleted success');
+      return deletedata;
+    }else{
+      console.log('No data found to deleted');
+    }
+  }catch(error){
+    console.error('Error deleting data',error);
+  }
+  
+};

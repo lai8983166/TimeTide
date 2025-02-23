@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertData = exports.getTableData = exports.createTableByDate = void 0;
+exports.deleteData = exports.insertData = exports.getTableData = exports.createTableByDate = void 0;
 exports.createDynamicModel = createDynamicModel;
 const sequelize_1 = require("sequelize");
 const DateLog_1 = __importDefault(require("./DateLog")); // 引入主表模型
@@ -137,3 +137,32 @@ const insertData = (date, schedule) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.insertData = insertData;
+//删除某个活动
+const deleteData = (date, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const tableName = `schedule_${date
+        .toISOString()
+        .split("T")[0]
+        .replace(/-/g, "_")}`;
+    // 创建动态模型
+    const Schedule = yield createDynamicModel(tableName);
+    // 同步表结构，alter: true 确保表结构与模型一致
+    yield Schedule.sync({ alter: true });
+    try {
+        const deletedata = yield Schedule.destroy({
+            where: {
+                id: id
+            }
+        });
+        if (deletedata) {
+            console.log('Data deleted success');
+            return deletedata;
+        }
+        else {
+            console.log('No data found to deleted');
+        }
+    }
+    catch (error) {
+        console.error('Error deleting data', error);
+    }
+});
+exports.deleteData = deleteData;
