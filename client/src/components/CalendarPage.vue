@@ -1,55 +1,67 @@
 <template>
+  <div class="container"> 
   <div class="task-add">
     <h1>Add Task</h1>
-    <form @submit.prevent="submitTask">
-      <label>Content: </label>
-      <input v-model="task.content" type="text" required />
+    <el-form :model="task" ref="taskForm" label-width="120px" class="task-form">
+      <el-form-item label="Content" :rules="[{ required: true, message: 'Please input task content', trigger: 'blur' }]">
+        <el-input v-model="task.content" placeholder="Enter task content"></el-input>
+      </el-form-item>
 
-      <label>Category: </label>
-      <input v-model="task.category" type="text" required />
+      <el-form-item label="Category" :rules="[{ required: true, message: 'Please input task category', trigger: 'blur' }]">
+        <el-input v-model="task.category" placeholder="Enter task category"></el-input>
+      </el-form-item>
 
-      <label>timeMode: </label>
-      <input v-model="task.timeMode" type="text" required />
+      <el-form-item label="Time Mode" :rules="[{ required: true, message: 'Please input time mode', trigger: 'blur' }]">
+        <el-input v-model="task.timeMode" placeholder="Enter time mode"></el-input>
+      </el-form-item>
 
-      <label>Start Time: </label>
-      <input v-model="task.startTime" type="datetime-local" required />
+      <el-form-item label="Start Time" :rules="[{ required: true, message: 'Please select start time', trigger: 'blur' }]">
+        <el-date-picker v-model="task.startTime" type="datetime" placeholder="Select start time" style="width: 100%"></el-date-picker>
+      </el-form-item>
 
-      <label>End Time: </label>
-      <input v-model="task.endTime" type="datetime-local" required />
+      <el-form-item label="End Time" :rules="[{ required: true, message: 'Please select end time', trigger: 'blur' }]">
+        <el-date-picker v-model="task.endTime" type="datetime" placeholder="Select end time" style="width: 100%"></el-date-picker>
+      </el-form-item>
 
-      <label>probableTime: </label>
-      <input v-model="task.probableTime" type="text" required />
+      <el-form-item label="Probable Time" :rules="[{ required: true, message: 'Please input probable time', trigger: 'blur' }]">
+        <el-input v-model="task.probableTime" placeholder="Enter probable time"></el-input>
+      </el-form-item>
 
-      <label>Is Aware: </label>
-      <input v-model="task.isAware" type="checkbox" />
+      <el-form-item label="Is Aware">
+        <el-checkbox v-model="task.isAware">Is Aware</el-checkbox>
+      </el-form-item>
 
-      <button type="submit">Add Task</button>
-    </form>
+      <el-form-item>
+        <el-button type="primary" @click="submitTask" class="submit-btn">Add Task</el-button>
+      </el-form-item>
+    </el-form>
   </div>
   <div class="table-container">
     <!-- 表头时间轴 -->
     <div class="time-column" v-for="(column, index) in 3" :key="index">
       <div class="time-slot" v-for="hour in hours" :key="hour">
         <div class="time-label">
-          {{ formatTime(hour + (index * 8)) }} 
+          {{ formatTime(hour + (index * 8)) }}
         </div>
-        <div 
-          v-for="task in tasksByHour[hour + (index * 8)]" 
-          :key="task.id" 
-          class="task-bar" 
+        <div
+          v-for="task in tasksByHour[hour + (index * 8)]"
+          :key="task.id"
+          class="task-bar"
           :style="getTaskBarStyle(task)"
-          @mouseover="showTaskDetails(task, $event)" 
+          @mouseover="showTaskDetails(task, $event)"
           @mouseleave="hideTaskDetails"
         >
         </div>
       </div>
     </div>
+
     <!-- 任务详细信息框 -->
     <div v-if="showDetails" :style="taskDetailsStyle" class="task-details-box">
       <p><strong>Task:</strong> {{ taskDetails.content }}</p>
       <p><strong>Start Time:</strong> {{ taskDetails.startTime }}</p>
       <p><strong>End Time:</strong> {{ taskDetails.endTime }}</p>
     </div>
+  </div>
   </div>
 </template>
 
@@ -113,6 +125,8 @@ export default {
           console.log('Task added successfully:', response.data);
           // 更新任务列表，显示成功消息等
         }
+        this.fetchTasks();
+        this.processTasks;
       } catch (error) {
         console.error('Error adding task:', error.response || error.message);
       }
@@ -181,6 +195,11 @@ export default {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  width:100%;
+}
+
 .table-container {
   display: flex;
   flex-direction: row;
@@ -229,6 +248,71 @@ export default {
   border: 1px solid #ccc;
   padding: 10px;
   z-index: 1000;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  min-width: 200px;
+}
+.task-add {
+  width: 800px;
+  
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+  text-align: center;
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.el-form {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.el-form-item {
+  margin-bottom: 20px;
+}
+
+.el-form-item label {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.el-input, .el-date-picker {
+  width: 100%;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 10px;
+  background-color: #409EFF;
+  border-color: #409EFF;
+}
+
+.submit-btn:hover {
+  background-color: #66b1ff;
+  border-color: #66b1ff;
+}
+
+.el-checkbox {
+  margin-top: 10px;
+}
+
+.el-input,
+.el-date-picker,
+.el-checkbox {
+  font-size: 14px;
+}
+
+.el-form-item:last-child {
+  margin-bottom: 0;
 }
 </style>
 
